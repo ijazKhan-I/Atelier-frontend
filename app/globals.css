@@ -1,26 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+
+  --color-brand-offwhite: #f8f7f4;
+  --color-brand-black: #111111;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-[var(--color-brand-offwhite)] text-[var(--color-brand-black)] font-sans antialiased m-0 p-0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
+  }
+
+  a {
+    @apply no-underline text-inherit;
+  }
+
+
+  .btn-primary {
+    @apply px-10 py-4 bg-white text-brand-black text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-brand-black hover:text-white transition-all duration-500;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  .nav-link {
+    @apply text-[11px] uppercase tracking-[0.2em] font-medium opacity-60 hover:opacity-100 transition-opacity duration-300;
+  }
+
+  .btn-primary {
+    @apply px-10 py-4 bg-white text-[var(--color-brand-black)] text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-[var(--color-brand-black)] hover:text-white transition-all duration-500;
+  }
+
+  .btn-outline {
+    @apply px-10 py-4 border border-white/40 text-white text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-white hover:text-[var(--color-brand-black)] transition-all duration-500;
+  }
+
+  .container-brand {
+    @apply max-w-screen-2xl mx-auto px-6 lg:px-12;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+
+
+
+/* section padding */
+
+
+@layer utilities {
+  /* Main horizontal container */
+  .section-container {
+    @apply w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16;
+  }
+
+  /* Standard vertical spacing */
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-24 xl:py-32;
+  }
+
+  /* Only top padding */
+  .section-padding-top {
+    @apply pt-16 sm:pt-20 lg:pt-24 xl:pt-32;
+  }
+
+  /* Only bottom padding */
+  .section-padding-bottom {
+    @apply pb-16 sm:pb-20 lg:pb-24 xl:pb-32;
+  }
+
+  /* Smaller section spacing */
+  .section-padding-sm {
+    @apply py-10 sm:py-12 lg:py-16;
+  }
+
+  /* Large hero spacing */
+  .section-padding-lg {
+    @apply py-24 sm:py-28 lg:py-36 xl:py-44;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
