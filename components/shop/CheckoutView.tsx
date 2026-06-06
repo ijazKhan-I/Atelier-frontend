@@ -91,7 +91,7 @@ export default function CheckoutView() {
     try {
       setSubmitting(true);
 
-      const response = await createCashOnDeliveryOrder(
+      const result = await createCashOnDeliveryOrder(
         {
           ...form,
           total: subtotal,
@@ -100,14 +100,14 @@ export default function CheckoutView() {
         token
       );
 
-      if (!response?.data?.orderNumber) {
-        orderToast.failed();
+      if (!result.ok) {
+        orderToast.failed(result.error);
         return;
       }
 
       clearCart();
-      orderToast.placed(response.data.orderNumber);
-      router.push(`/checkout/success?order=${response.data.orderNumber}`);
+      orderToast.placed(result.order.orderNumber);
+      router.push(`/checkout/success?order=${result.order.orderNumber}`);
     } catch (error) {
       console.error("Order failed:", error);
       orderToast.failed();

@@ -50,7 +50,26 @@ import type { Product as StrapiProduct } from "@/type/shopType";
 
 type Props = {
   products: StrapiProduct[];
+  searchQuery?: string;
 };
+
+function matchesSearch(product: StrapiProduct, searchQuery: string) {
+  if (!searchQuery) return true;
+
+  const query = searchQuery.toLowerCase();
+  const haystack = [
+    product.name,
+    product.description,
+    product.category?.name,
+    ...(product.productVariation?.map((variation) => variation.name) ?? []),
+    ...(product.productVariation?.map((variation) => variation.size) ?? []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return haystack.includes(query);
+}
 
 const ITEMS_PER_PAGE = 6;
 
@@ -118,7 +137,7 @@ function buildFilterOptions(products: StrapiProduct[]): FilterOptions {
   };
 }
 
-export default function ProductGrid({ products }: Props) {
+export default function ProductGrid({ products, searchQuery = "" }: Props) {
   
   const [selectedFilters, setSelectedFilters] = useState(emptyFilters);
   const [sortBy, setSortBy] = useState<SortOption>("Newest Arrivals");
@@ -134,6 +153,10 @@ export default function ProductGrid({ products }: Props) {
 
   const filteredProducts = useMemo(() => {
     const filtered = products.filter((product) => {
+      if (!matchesSearch(product, searchQuery)) {
+        return false;
+      }
+
       const firstVariation = product.productVariation?.[0];
 
       const category = product.category?.name ?? "";
@@ -180,7 +203,7 @@ export default function ProductGrid({ products }: Props) {
     });
 
     return sorted;
-  }, [products, selectedFilters, sortBy]);
+  }, [products, selectedFilters, sortBy, searchQuery]);
 
   const totalPages = Math.max(
     1,
@@ -189,7 +212,7 @@ export default function ProductGrid({ products }: Props) {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedFilters, sortBy]);
+  }, [selectedFilters, sortBy, searchQuery]);
 
   useEffect(() => {
     if (currentPage > totalPages) {
@@ -249,6 +272,12 @@ export default function ProductGrid({ products }: Props) {
       />
 
       <section id="products" className="section-container py-12">
+        {searchQuery ? (
+          <p className="max-w-7xl mx-auto mb-8 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+            Results for &ldquo;{searchQuery}&rdquo;
+          </p>
+        ) : null}
+
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
           {pageProducts.map((product) => {
             return (

@@ -1,12 +1,11 @@
-import React from 'react'
-import About from './aboutClient'
+import AboutClient from "./aboutClient";
+import { getAboutPageContent } from "@/app/api/about/about";
 
-function AboutPage() {
-  return (
-    <>
-    <About/>
-    </>
-  )
+/** Always fetch fresh About content from Strapi. */
+export const dynamic = "force-dynamic";
+
+export default async function AboutPage() {
+  const content = await getAboutPageContent();
+
+  return <AboutClient content={content} />;
 }
-
-export default AboutPage

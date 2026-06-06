@@ -1,10 +1,10 @@
 import HomeHeroSection from "@/components/home/HomeHeroSection";
-import type { TrendingSectionData } from "@/type/homeType";
+import type { HomePageContent } from "@/type/homeType";
 
 type Props = {
-  trendingSection: TrendingSectionData;
+  content: HomePageContent;
 };
 
-export default function HomeClient({ trendingSection }: Props) {
-  return <HomeHeroSection trendingSection={trendingSection} />;
+export default function HomeClient({ content }: Props) {
+  return <HomeHeroSection content={content} />;
 }

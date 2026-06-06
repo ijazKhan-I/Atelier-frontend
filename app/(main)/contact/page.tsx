@@ -1,13 +1,11 @@
-import React from 'react'
-import Contact from './contactClient'
+import ContactClient from "./contactClient";
+import { getContactPageContent } from "@/app/api/contact/contact";
 
-function ContactPage() {
-  return (
-    <>
-    <Contact/>
+/** Always fetch fresh Contact content from Strapi. */
+export const dynamic = "force-dynamic";
 
-    </>
-  )
+export default async function ContactPage() {
+  const content = await getContactPageContent();
+
+  return <ContactClient content={content} />;
 }
-
-export default ContactPage

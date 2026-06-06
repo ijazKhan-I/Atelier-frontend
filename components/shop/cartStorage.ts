@@ -7,6 +7,7 @@ export type CartItem = {
   color: string;
   size: string;
   quantity: number;
+  maxStock: number;
 };
 
 const CART_KEY = "cart";
@@ -15,7 +16,14 @@ export function readCart(): CartItem[] {
   if (typeof window === "undefined") return [];
 
   try {
-    return JSON.parse(localStorage.getItem(CART_KEY) ?? "[]") as CartItem[];
+    const parsed = JSON.parse(localStorage.getItem(CART_KEY) ?? "[]") as CartItem[];
+    return parsed.map((item) => ({
+      ...item,
+      maxStock:
+        typeof item.maxStock === "number" && item.maxStock >= 0
+          ? item.maxStock
+          : Math.max(item.quantity, 1),
+    }));
   } catch {
     return [];
   }
@@ -28,6 +36,7 @@ export function writeCart(cart: CartItem[]) {
 
 export function addToCart(item: Omit<CartItem, "quantity">) {
   const cart = readCart();
+  const maxStock = Math.max(0, item.maxStock);
   const existingIndex = cart.findIndex(
     (cartItem) =>
       cartItem.id === item.id &&
@@ -35,13 +44,22 @@ export function addToCart(item: Omit<CartItem, "quantity">) {
       cartItem.size === item.size
   );
 
+  if (maxStock <= 0) {
+    return false;
+  }
+
   if (existingIndex >= 0) {
-    cart[existingIndex].quantity += 1;
+    cart[existingIndex].maxStock = maxStock;
+    cart[existingIndex].quantity = Math.min(
+      cart[existingIndex].quantity + 1,
+      maxStock
+    );
   } else {
-    cart.push({ ...item, quantity: 1 });
+    cart.push({ ...item, quantity: 1, maxStock });
   }
 
   writeCart(cart);
+  return true;
 }
 
 export function updateCartQuantity(
@@ -51,11 +69,22 @@ export function updateCartQuantity(
   quantity: number
 ) {
   const cart = readCart()
-    .map((item) =>
-      item.documentId === documentId && item.color === color && item.size === size
-        ? { ...item, quantity }
-        : item
-    )
+    .map((item) => {
+      if (
+        item.documentId !== documentId ||
+        item.color !== color ||
+        item.size !== size
+      ) {
+        return item;
+      }
+
+      const maxStock = Math.max(0, item.maxStock ?? quantity);
+      return {
+        ...item,
+        maxStock,
+        quantity: Math.min(Math.max(quantity, 0), maxStock),
+      };
+    })
     .filter((item) => item.quantity > 0);
 
   writeCart(cart);

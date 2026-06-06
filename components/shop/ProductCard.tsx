@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Product } from "@/type/shopType";
 import { BASIC_URL } from "@/app/api/strapi";
+import { isProductInStock } from "@/lib/product-stock";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +14,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 const firstImage = Array.isArray(product.image)? product.image[0]: product.image;
 
 const imageUrl = `${BASIC_URL}${firstImage?.url}`;
+const inStock = isProductInStock(product);
 
   const card = (
     <motion.div
@@ -22,6 +24,11 @@ const imageUrl = `${BASIC_URL}${firstImage?.url}`;
       className="group cursor-pointer"
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-black/5 mb-6">
+        {!inStock ? (
+          <span className="absolute left-4 top-4 z-10 bg-black px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+            Out of Stock
+          </span>
+        ) : null}
         {product.image ? (
           <img
             src={imageUrl}

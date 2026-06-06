@@ -114,6 +114,13 @@ export default function CartView() {
                         <p className="mt-2 text-xs uppercase tracking-[0.25em] text-black/45">
                           {item.color} / {item.size}
                         </p>
+                        <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-black/40">
+                          {item.maxStock <= 0
+                            ? "Out of stock"
+                            : item.quantity >= item.maxStock
+                              ? `Max ${item.maxStock} available`
+                              : `${item.maxStock - item.quantity} more available`}
+                        </p>
                       </div>
                       <p className="text-sm text-black/60">
                         {formatPrice(item.price)}
@@ -149,7 +156,8 @@ export default function CartView() {
                               item.quantity + 1
                             )
                           }
-                          className="px-4 py-3 text-black/60 hover:text-black transition-colors"
+                          disabled={item.quantity >= item.maxStock}
+                          className="px-4 py-3 text-black/60 hover:text-black transition-colors disabled:cursor-not-allowed disabled:opacity-35"
                         >
                           <Plus size={14} />
                         </button>

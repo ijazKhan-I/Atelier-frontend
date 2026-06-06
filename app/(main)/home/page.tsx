@@ -1,10 +1,11 @@
 import HomeClient from "./homeClient";
-import { getTrendingSection } from "@/app/api/home/home";
+import { getHomePageContent } from "@/app/api/home/home";
 
+/** Always fetch fresh Home Page content from Strapi. */
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const trendingSection = await getTrendingSection();
+  const content = await getHomePageContent();
 
-  return <HomeClient trendingSection={trendingSection} />;
+  return <HomeClient content={content} />;
 }

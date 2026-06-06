@@ -22,6 +22,21 @@ export type CreateOrderInput = {
   items: OrderItemInput[];
 };
 
+export type FulfillmentSource = {
+  documentId: string;
+  name: string;
+  sourceType: "store" | "warehouse";
+  streetAddress?: string;
+  city?: string;
+  country?: string;
+  phone?: string;
+  isActive?: boolean;
+  lat?: number | null;
+  lng?: number | null;
+  geohash?: string | null;
+  location?: { lat?: number; lng?: number } | null;
+};
+
 export type Order = {
   id: number;
   documentId: string;
@@ -34,10 +49,21 @@ export type Order = {
   city: string;
   country: string;
   paymentMethod: "cash_on_delivery";
-  orderStatus: "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
+  orderStatus:
+    | "pending"
+    | "confirmed"
+    | "shipped"
+    | "delivering"
+    | "delivered"
+    | "cancelled";
   total: number;
   customerId?: number;
   customerUsername?: string;
+  trackingMapUrl?: string | null;
+  driverLatitude?: number | null;
+  driverLongitude?: number | null;
+  driverLocationUpdatedAt?: string | null;
+  fulfillmentSource?: FulfillmentSource | null;
   items?: OrderItemInput[];
 };
 

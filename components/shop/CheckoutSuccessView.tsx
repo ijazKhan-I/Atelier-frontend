@@ -18,11 +18,19 @@ export default function CheckoutSuccessView() {
           Your order has been sent to our team. Payment will be collected in cash
           when your delivery arrives.
         </p>
-        {orderNumber && (
-          <p className="text-sm font-medium mb-10">
-            Order number: <span className="font-serif">{orderNumber}</span>
-          </p>
-        )}
+        {orderNumber ? (
+          <>
+            <p className="text-sm font-medium mb-4">
+              Order number: <span className="font-serif">{orderNumber}</span>
+            </p>
+            <Link
+              href={`/orders/track?order=${encodeURIComponent(orderNumber)}`}
+              className="inline-flex mb-10 text-[10px] uppercase tracking-[0.25em] font-semibold border-b border-black pb-1"
+            >
+              Track your order
+            </Link>
+          </>
+        ) : null}
         <Link
           href="/shop"
           className="inline-flex bg-black text-white text-[11px] uppercase tracking-[0.35em] font-medium px-8 py-4 hover:bg-zinc-900 transition-colors"

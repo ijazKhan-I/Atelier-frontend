@@ -15,9 +15,15 @@ const navLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
+const authNavLinks = [{ label: "Orders", href: "/orders" }];
+
 function isNavLinkActive(href: string, pathname: string) {
   if (href === "/") {
     return pathname === "/";
+  }
+
+  if (href === "/orders") {
+    return pathname === "/orders" || pathname.startsWith("/orders/");
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -30,6 +36,8 @@ export default function Header() {
   const [cartCount, setCartCount] = useState(0);
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     const syncCartCount = () => setCartCount(getCartCount());
@@ -59,6 +67,31 @@ export default function Header() {
     authToast.logoutSuccess();
     setMobileMenuOpen(false);
     router.push("/");
+  };
+
+  const openSearch = () => {
+    if (pathname.startsWith("/shop")) {
+      const params = new URLSearchParams(window.location.search);
+      setSearchInput(params.get("q") ?? "");
+    } else {
+      setSearchInput("");
+    }
+    setSearchOpen(true);
+  };
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const query = searchInput.trim();
+    setSearchOpen(false);
+    setMobileMenuOpen(false);
+
+    if (!query) {
+      router.push("/shop#products");
+      return;
+    }
+
+    router.push(`/shop?q=${encodeURIComponent(query)}#products`);
   };
 
   return (
@@ -94,6 +127,22 @@ export default function Header() {
                   </Link>
                 );
               })}
+              {loggedIn &&
+                authNavLinks.map((link) => {
+                  const isActive = isNavLinkActive(link.href, pathname);
+
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className={`nav-link ${
+                        isActive ? "!opacity-100 border-b border-black pb-1" : ""
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
             </div>
           </div>
 
@@ -102,8 +151,10 @@ export default function Header() {
 
             <button
               type="button"
+              onClick={openSearch}
               className="p-2 opacity-70 hover:opacity-100 transition-opacity"
               aria-label="Search"
+              aria-expanded={searchOpen}
             >
               <Search size={18} />
             </button>
@@ -153,6 +204,39 @@ export default function Header() {
           </div>
         </div>
 
+        {searchOpen ? (
+          <div className="border-t border-black/5 bg-brand-offwhite/95 backdrop-blur-md px-6 lg:px-12 py-4">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="max-w-screen-2xl mx-auto flex items-center gap-4"
+            >
+              <Search size={18} className="shrink-0 opacity-50" />
+              <input
+                type="search"
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                placeholder="Search products..."
+                autoFocus
+                className="flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-black/35"
+              />
+              <button
+                type="submit"
+                className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-70 hover:opacity-100 transition-opacity"
+              >
+                Search
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearchOpen(false)}
+                className="p-1 opacity-50 hover:opacity-100 transition-opacity"
+                aria-label="Close search"
+              >
+                <X size={18} />
+              </button>
+            </form>
+          </div>
+        ) : null}
+
         {/* Mobile Menu */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-300 ${mobileMenuOpen
@@ -180,6 +264,26 @@ export default function Header() {
               );
             })}
 
+            {loggedIn &&
+              authNavLinks.map((link) => {
+                const isActive = isNavLinkActive(link.href, pathname);
+
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`text-sm uppercase tracking-wide transition-opacity duration-300 w-fit ${
+                      isActive
+                        ? "opacity-100 border-b border-black pb-1"
+                        : "opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+
             {loggedIn ? (
               <button
                 type="button"
@@ -199,6 +303,18 @@ export default function Header() {
                 Login
               </Link>
             )}
+
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openSearch();
+              }}
+              className="flex items-center gap-2 text-sm uppercase tracking-wide opacity-60 hover:opacity-100 transition-opacity w-fit"
+            >
+              <Search size={16} />
+              Search
+            </button>
           </div>
         </div>
       </nav>

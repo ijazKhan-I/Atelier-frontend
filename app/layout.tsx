@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen bg-brand-offwhite text-brand-black font-sans flex flex-col">
         {children}
         <AppToaster />
       </body>

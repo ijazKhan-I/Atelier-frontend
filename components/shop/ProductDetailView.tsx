@@ -8,6 +8,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { ReactNode } from "react";
 import type { Product as StrapiProduct, RichTextBlock, StrapiImage } from "@/type/shopType";
 import { addToCart } from "./cartStorage";
+import {
+  findProductVariation,
+  getAvailableStock,
+  getStockLabel,
+  isVariationInStock,
+} from "@/lib/product-stock";
+import { toast } from "sonner";
 
 type Props = {
   product: StrapiProduct;
@@ -207,20 +214,16 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
   }, [product, selectedColor, sizes]);
 
   const selectedVariation = useMemo(() => {
-    if (!selectedColor) return undefined;
-
-    const exactMatch = product.productVariation?.find(
-      (variation) =>
-        variation.name === selectedColor &&
-        (selectedSize ? variation.size === selectedSize : true)
-    );
-
-    if (exactMatch) return exactMatch;
-
-    return product.productVariation?.find(
-      (variation) => variation.name === selectedColor
-    );
+    return findProductVariation(product, selectedColor, selectedSize);
   }, [product, selectedColor, selectedSize]);
+
+  const availableStock = useMemo(
+    () => getAvailableStock(product, selectedColor, selectedSize),
+    [product, selectedColor, selectedSize]
+  );
+
+  const inStock = availableStock > 0;
+  const stockLabel = getStockLabel(availableStock);
 
   const displayPrice = selectedVariation?.price ?? product.price;
   const breadcrumbCategory = product.category?.name?.toUpperCase() ?? "PRODUCT";
@@ -267,7 +270,12 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
   };
 
   const handleAddToBag = () => {
-    addToCart({
+    if (!inStock) {
+      toast.error("This variant is out of stock.");
+      return;
+    }
+
+    const added = addToCart({
       id: product.id,
       documentId: product.documentId,
       name: product.name,
@@ -275,7 +283,13 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
       image: mainImage,
       color: selectedColor || "Default",
       size: selectedSize,
+      maxStock: availableStock,
     });
+
+    if (!added) {
+      toast.error("This variant is out of stock.");
+      return;
+    }
 
     router.push("/cart");
   };
@@ -402,7 +416,10 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
                 </button>
               </div>
               <div className="grid grid-cols-4 border border-black/15">
-                {sizesForSelectedColor.map((size) => (
+                {sizesForSelectedColor.map((size) => {
+                  const sizeInStock = isVariationInStock(product, selectedColor, size);
+
+                  return (
                   <button
                     key={size}
                     type="button"
@@ -410,7 +427,8 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
                       setSelectedSize(size);
                       setActiveImageIndex(0);
                     }}
-                    className={`py-5 text-[10px] tracking-widest border-r last:border-r-0 border-black/15 transition-all ${
+                    disabled={!sizeInStock}
+                    className={`py-5 text-[10px] tracking-widest border-r last:border-r-0 border-black/15 transition-all disabled:cursor-not-allowed disabled:opacity-35 ${
                       selectedSize === size
                         ? "bg-black text-white"
                         : "bg-transparent text-black hover:bg-black/5"
@@ -418,16 +436,25 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
                   >
                     {size}
                   </button>
-                ))}
+                  );
+                })}
               </div>
+              <p
+                className={`text-[10px] uppercase tracking-[0.2em] ${
+                  inStock ? "text-black/45" : "text-red-600"
+                }`}
+              >
+                {stockLabel}
+              </p>
             </div>
 
             <button
               type="button"
               onClick={handleAddToBag}
-              className="w-full bg-black text-white text-[11px] uppercase tracking-[0.4em] font-medium py-6 mb-16 hover:bg-zinc-900 active:scale-[0.99] transition-all"
+              disabled={!inStock}
+              className="w-full bg-black text-white text-[11px] uppercase tracking-[0.4em] font-medium py-6 mb-16 hover:bg-zinc-900 active:scale-[0.99] transition-all disabled:cursor-not-allowed disabled:bg-black/35"
             >
-              Add to Bag
+              {inStock ? "Add to Bag" : "Out of Stock"}
             </button>
 
             <div className="space-y-0">
