@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
 import ProductDetailView from "@/components/shop/ProductDetailView";
 import {
-  getAllProducts,
   getProductByDocumentId,
+  getRelatedCategoryProducts,
 } from "@/app/api/shop/shop";
+
+/** Always load fresh product + related items from Strapi (not stale build cache). */
+export const dynamic = "force-dynamic";
 
 type PageProps = {
   params: Promise<{
@@ -20,14 +23,7 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  const categoryProductsResponse = product.category?.slug
-    ? await getAllProducts({ categorySlug: product.category.slug })
-    : null;
-
-  const categoryProducts =
-    categoryProductsResponse?.data
-      .filter((item) => item.documentId !== product.documentId)
-      .slice(0, 8) ?? [];
+  const categoryProducts = await getRelatedCategoryProducts(product);
 
   return (
     <ProductDetailView

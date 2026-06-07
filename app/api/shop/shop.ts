@@ -11,6 +11,7 @@ export type ProductQueryFilters = {
   color?: string;
   minPrice?: number;
   maxPrice?: number;
+  pageSize?: number;
   sortBy?:
     | "Newest Arrivals"
     | "Price: Low to High"
@@ -45,6 +46,7 @@ function buildProductQuery(filters: ProductQueryFilters = {}) {
   );
 
   params.append("sort[0]", mapSortToStrapi(filters.sortBy));
+  params.append("pagination[pageSize]", String(filters.pageSize ?? 100));
 
   if (filters.categorySlug) {
     params.append("filters[category][slug][$eq]", filters.categorySlug);
@@ -108,6 +110,42 @@ export async function getProductByDocumentId(documentId: string) {
   return await fetchStrapi<StrapiSingleResponse<Product>>(
     `/api/products/${documentId}?populate[image][populate]=*&populate[category][populate][image][populate]=*&populate[productVariation][populate][image][populate]=*`
   );
+}
+
+/** Other products in the same category (for "More from …" on product detail). */
+export async function getRelatedCategoryProducts(product: Product, limit = 8) {
+  const category = product.category;
+  if (!category?.slug && !category?.documentId && !category?.name) {
+    return [];
+  }
+
+  const isSameCategory = (item: Product) => {
+    if (item.documentId === product.documentId) return false;
+
+    if (category.documentId && item.category?.documentId === category.documentId) {
+      return true;
+    }
+    if (category.slug && item.category?.slug === category.slug) {
+      return true;
+    }
+    if (category.name && item.category?.name === category.name) {
+      return true;
+    }
+
+    return false;
+  };
+
+  if (category.slug) {
+    const bySlug = await getAllProducts({ categorySlug: category.slug, pageSize: 100 });
+    const matched = (bySlug?.data ?? []).filter(isSameCategory);
+    if (matched.length > 0) {
+      return matched.slice(0, limit);
+    }
+  }
+
+  // Fallback when slug filter returns nothing (common across Strapi/env differences).
+  const allProducts = await getAllProducts({ pageSize: 100 });
+  return (allProducts?.data ?? []).filter(isSameCategory).slice(0, limit);
 }
 
 export async function getCategoriesWithProducts(
