@@ -7,24 +7,26 @@ type Props = {
   content: AboutPageContent;
 };
 
-/** Tailwind classes for each pillar cell style from Strapi. */
 const PILLAR_STYLES: Record<
   AboutPillarStyle,
   { container: string; title: string; text: string }
 > = {
   white: {
-    container: "flex flex-col justify-between bg-white p-12 lg:p-24",
+    container:
+      "flex min-h-[420px] flex-col justify-between bg-white p-10 lg:min-h-[500px] lg:p-16 xl:p-20",
     title: "font-serif text-3xl lg:text-4xl",
-    text: "max-w-sm text-sm leading-relaxed text-brand-black/60 lg:text-base",
+    text: "max-w-md text-sm leading-relaxed text-brand-black/60 lg:text-[15px]",
   },
   black: {
-    container: "flex flex-col justify-center bg-brand-black p-12 text-white lg:p-24",
+    container:
+      "flex min-h-[420px] flex-col justify-center bg-brand-black p-10 text-white lg:min-h-[500px] lg:p-16 xl:p-20",
     title: "font-serif text-3xl lg:text-4xl",
-    text: "max-w-sm text-sm leading-relaxed text-white/60 lg:text-base",
+    text: "max-w-md text-sm leading-relaxed text-white/60 lg:text-[15px]",
   },
   gray: {
-    container: "bg-[#f0f0f0] p-12 lg:p-24",
-    title: "font-serif text-2xl lg:text-3xl",
+    container:
+      "flex min-h-[220px] flex-col justify-center bg-[#efefef] p-10 lg:min-h-[260px] lg:p-16 xl:p-20",
+    title: "font-serif text-xl uppercase tracking-[0.18em] lg:text-2xl",
     text: "max-w-sm text-sm leading-relaxed text-brand-black/60",
   },
 };
@@ -33,101 +35,115 @@ export default function AboutClient({ content }: Props) {
   const { hero, heritage, process, pillarsHeading, pillars, uniform } = content;
 
   return (
-    <div className="-mt-20 min-h-screen bg-brand-offwhite text-brand-black">
-      {/* ── Hero (Strapi: hero component) ── */}
-      <section className="relative h-[90vh] overflow-hidden bg-black">
+    <div className="min-h-screen bg-white text-brand-black">
+      {/* Hero */}
+      <section className="relative h-[78vh] min-h-[560px] overflow-hidden bg-black">
         <img
           src={hero.backgroundImageUrl}
           alt={hero.title}
-          className="h-full w-full scale-105 object-cover object-[center_15%] opacity-60 grayscale"
+          className="h-full w-full object-cover object-[center_18%] grayscale"
           referrerPolicy="no-referrer"
         />
+        <div className="absolute inset-0 bg-black/15" />
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center text-white">
-          <h1 className="mb-6 font-serif text-6xl tracking-tight lg:text-8xl xl:text-9xl">
+          <h1 className="mb-5 font-serif text-5xl tracking-tight md:text-7xl lg:text-8xl">
             {hero.title}
           </h1>
-          <span className="text-[10px] font-medium uppercase tracking-[0.5em] opacity-60 lg:text-xs">
+          <span className="text-[10px] font-medium uppercase tracking-[0.45em] text-white/75 lg:text-[11px]">
             {hero.subtitle}
           </span>
         </div>
       </section>
 
-      {/* ── Heritage (Strapi: heritage component) ── */}
-      <section className="section-container space-y-12 py-24 text-center lg:py-48">
-        <h2 className="font-serif text-4xl lg:text-5xl">{heritage.title}</h2>
-        <div className="mx-auto max-w-2xl space-y-8">
-          <p className="text-sm font-light leading-relaxed text-brand-black/70 lg:text-lg">
-            {heritage.paragraphOne}
-          </p>
-          <p className="text-sm font-light leading-relaxed text-brand-black/70 lg:text-lg">
-            {heritage.paragraphTwo}
-          </p>
-        </div>
-      </section>
-
-      {/* ── Process (Strapi: process component) ── */}
-      <section className="section-container pb-24 lg:pb-32">
-        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
-          <div className="relative">
-            <div className="aspect-[4/5] overflow-hidden">
-              <img
-                src={process.imageUrl}
-                alt={process.title}
-                className="h-full w-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="absolute -bottom-12 -right-6 hidden max-w-[240px] bg-white p-10 shadow-2xl lg:block">
-              <p className="text-[10px] font-bold uppercase tracking-widest">
-                {process.cardLabel}
-              </p>
-              <p className="mt-4 text-xs italic leading-relaxed text-brand-black/60">
-                {process.cardQuote}
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-8 lg:pt-16">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-brand-black/45">
-              {process.label}
-            </span>
-            <h2 className="max-w-md font-serif text-4xl leading-tight lg:text-6xl">
-              {process.title}
-            </h2>
-            <p className="max-w-sm text-sm leading-relaxed text-brand-black/60 lg:text-base">
-              {process.description}
-            </p>
-            <Link
-              href={process.linkUrl || "/shop"}
-              className="inline-flex items-center gap-1 border-b border-brand-black pb-2 text-[11px] font-bold uppercase tracking-widest transition-opacity hover:opacity-50"
-            >
-              {process.linkLabel}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Pillars (Strapi: pillarsHeading + pillars repeatable component) ── */}
-      <section className="bg-white py-24 lg:py-48">
+      {/* Heritage */}
+      <section className="section-padding bg-white">
         <div className="section-container">
-          <h2 className="mb-24 text-center font-serif text-5xl lg:mb-32 lg:text-7xl">
+          <h2 className="mb-12 text-center font-serif text-4xl lg:mb-16 lg:text-5xl">
+            {heritage.title}
+          </h2>
+          <div className="mx-auto max-w-xl space-y-8 text-left">
+            <p className="text-sm font-light leading-[1.9] text-brand-black/70 lg:text-base">
+              {heritage.paragraphOne}
+            </p>
+            <p className="text-sm font-light leading-[1.9] text-brand-black/70 lg:text-base">
+              {heritage.paragraphTwo}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="section-padding bg-[#f4f3f0]">
+        <div className="section-container">
+          <div className="grid grid-cols-1 items-end gap-14 lg:grid-cols-2 lg:gap-20 xl:gap-28">
+            <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+              <div className="aspect-[4/5] overflow-hidden bg-[#eceae6]">
+                <img
+                  src={process.imageUrl}
+                  alt={process.title}
+                  className="h-full w-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="absolute -bottom-8 -right-4 max-w-[240px] bg-white p-8 shadow-[0_24px_60px_rgba(0,0,0,0.12)] lg:-bottom-10 lg:-right-8 lg:p-10">
+                <p className="text-[10px] font-bold uppercase tracking-[0.25em]">
+                  {process.cardLabel}
+                </p>
+                <p className="mt-4 text-xs italic leading-relaxed text-brand-black/60">
+                  {process.cardQuote}
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-7 pb-4 lg:pb-10 lg:pt-8">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-brand-black/45">
+                {process.label}
+              </span>
+              <h2 className="max-w-md font-serif text-4xl leading-[1.05] lg:text-6xl">
+                {process.title}
+              </h2>
+              <p className="max-w-md text-sm leading-relaxed text-brand-black/60 lg:text-[15px]">
+                {process.description}
+              </p>
+              <Link
+                href={process.linkUrl || "/shop"}
+                className="inline-flex border-b border-brand-black pb-2 text-[10px] font-bold uppercase tracking-[0.25em] transition-opacity hover:opacity-50"
+              >
+                {process.linkLabel}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pillars */}
+      <section className="section-padding bg-white">
+        <div className="section-container">
+          <h2 className="mb-16 text-center font-serif text-5xl lg:mb-24 lg:text-7xl">
             {pillarsHeading}
           </h2>
 
-          <div className="grid grid-cols-1 items-stretch gap-px bg-black/5 lg:grid-cols-2">
+          <div className="grid grid-cols-1 border border-black/5 lg:grid-cols-2">
             {pillars.map((pillar, index) => {
               const styles = PILLAR_STYLES[pillar.style] ?? PILLAR_STYLES.white;
+              const isTopRow = index < 2;
 
               return (
-                <div key={`${pillar.title}-${index}`} className={styles.container}>
-                  <div className={pillar.style === "white" ? "space-y-8" : "space-y-4"}>
+                <div
+                  key={`${pillar.title}-${index}`}
+                  className={`${styles.container} ${
+                    index % 2 === 0 ? "lg:border-r lg:border-black/5" : ""
+                  } ${isTopRow ? "lg:border-b lg:border-black/5" : ""} ${
+                    index === 2 ? "lg:border-r lg:border-black/5" : ""
+                  }`}
+                >
+                  <div className={pillar.style === "white" ? "space-y-6" : "space-y-4"}>
                     <h3 className={styles.title}>{pillar.title}</h3>
                     <p className={styles.text}>{pillar.description}</p>
                   </div>
 
-                  {/* Optional image — used by Sustainability pillar in the design */}
                   {pillar.imageUrl ? (
-                    <div className="mt-10 aspect-[16/6] overflow-hidden opacity-90">
+                    <div className="mt-10 aspect-[16/7] overflow-hidden">
                       <img
                         src={pillar.imageUrl}
                         alt={pillar.title}
@@ -143,36 +159,34 @@ export default function AboutClient({ content }: Props) {
         </div>
       </section>
 
-      {/* ── Uniform (Strapi: uniform component) ── */}
-      <section className="relative bg-[#e5e5e5]">
-        <div className="grid min-h-[480px] grid-cols-1 md:min-h-[540px] md:grid-cols-2">
-          <div className="flex aspect-[4/5] items-center justify-center bg-[#e5e5e5] p-8 md:aspect-auto md:min-h-[540px] md:p-12">
+      {/* Modern Uniform */}
+      <section className="bg-[#e5e5e5]">
+        <div className="grid min-h-[480px] grid-cols-1 md:min-h-[560px] md:grid-cols-2">
+          <div className="relative min-h-[420px] overflow-hidden bg-[#e5e5e5] md:min-h-[560px]">
             <img
               src={uniform.leftImageUrl}
               alt={uniform.title}
-              className="max-h-full max-w-full object-contain mix-blend-multiply"
+              className="absolute inset-0 h-full w-full object-contain p-10 mix-blend-multiply md:p-14 lg:p-16"
               referrerPolicy="no-referrer"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 z-10 p-8 text-white md:p-12 lg:p-16">
+              <h2 className="max-w-sm font-serif text-4xl leading-[1.02] lg:text-6xl">
+                {uniform.title}
+              </h2>
+              <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/90 lg:text-[15px]">
+                {uniform.description}
+              </p>
+            </div>
           </div>
-          <div className="flex aspect-[4/5] items-center justify-center bg-[#e5e5e5] p-8 md:aspect-auto md:min-h-[540px] md:p-12">
+
+          <div className="relative min-h-[420px] overflow-hidden bg-[#e5e5e5] md:min-h-[560px]">
             <img
               src={uniform.rightImageUrl}
               alt="Uniform piece"
-              className="max-h-full max-w-full object-contain mix-blend-multiply"
+              className="absolute inset-0 h-full w-full object-contain p-10 mix-blend-multiply md:p-14 lg:p-16"
               referrerPolicy="no-referrer"
             />
-          </div>
-        </div>
-
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-full bg-gradient-to-t from-black/55 via-black/15 to-transparent md:w-1/2" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex w-full flex-col justify-end p-8 md:w-1/2 md:p-14 lg:p-20">
-          <div className="max-w-md text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.45)]">
-            <h2 className="font-serif text-4xl leading-none lg:text-6xl xl:text-7xl">
-              {uniform.title}
-            </h2>
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-white/90 lg:text-base">
-              {uniform.description}
-            </p>
           </div>
         </div>
       </section>

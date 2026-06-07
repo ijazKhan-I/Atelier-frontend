@@ -7,9 +7,8 @@ export function getProductCardImageUrl(product: Product) {
     ? product.image[0]
     : product.image;
 
-  if (galleryImage) {
-    return getStrapiImageUrl(galleryImage);
-  }
+  const galleryUrl = getStrapiImageUrl(galleryImage);
+  if (galleryUrl) return galleryUrl;
 
   const variationImage = product.productVariation?.find((v) => v.image)?.image;
   return getStrapiImageUrl(variationImage);

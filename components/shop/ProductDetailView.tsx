@@ -195,9 +195,8 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState("");
-  const [selectedSize, setSelectedSize] = useState(
-    () => product.productVariation?.[0]?.size ?? sizes[0] ?? "S"
-  );
+  const [selectedSize, setSelectedSize] = useState("");
+  const [sizePicked, setSizePicked] = useState(false);
   const [currentRelatedPage, setCurrentRelatedPage] = useState(0);
 
   const sizesForSelectedColor = useMemo(() => {
@@ -214,18 +213,26 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
   }, [product, selectedColor, sizes]);
 
   const selectedVariation = useMemo(() => {
+    if (!sizePicked || !selectedSize) return undefined;
     return findProductVariation(product, selectedColor, selectedSize);
-  }, [product, selectedColor, selectedSize]);
+  }, [product, selectedColor, selectedSize, sizePicked]);
 
-  const availableStock = useMemo(
-    () => getAvailableStock(product, selectedColor, selectedSize),
-    [product, selectedColor, selectedSize]
-  );
+  const availableStock = useMemo(() => {
+    if (!sizePicked || !selectedSize) return 0;
+    return getAvailableStock(product, selectedColor, selectedSize);
+  }, [product, selectedColor, selectedSize, sizePicked]);
 
-  const inStock = availableStock > 0;
-  const stockLabel = getStockLabel(availableStock);
+  const inStock = sizePicked && availableStock > 0;
+  const stockLabel = !sizePicked
+    ? "Select a size"
+    : getStockLabel(availableStock);
 
-  const displayPrice = selectedVariation?.price ?? product.price;
+  const mainPrice = typeof product.price === "number" ? product.price : 0;
+  const displayPrice =
+    sizePicked && typeof selectedVariation?.price === "number"
+      ? selectedVariation.price
+      : mainPrice;
+  const variantImageUrl = getImageUrl(selectedVariation?.image);
   const breadcrumbCategory = product.category?.name?.toUpperCase() ?? "PRODUCT";
 
   const descriptionLines = product.description
@@ -236,19 +243,10 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
   const returnLines = flattenBlocks(product.return_policy);
   const artisanLines = flattenBlocks(product.artisan_notes);
 
-  const selectedVariationImageUrl = selectedColor ? getImageUrl(selectedVariation?.image) : "";
-
-  const visibleImages = useMemo(() => {
-    const images = [...galleryImages];
-
-    if (selectedVariationImageUrl && !images.includes(selectedVariationImageUrl)) {
-      images.unshift(selectedVariationImageUrl);
-    }
-
-    return images.length > 0 ? images : [""];
-  }, [galleryImages, selectedVariationImageUrl]);
-
-  const mainImage = visibleImages[activeImageIndex] ?? visibleImages[0] ?? "";
+  const mainImage =
+    sizePicked && variantImageUrl
+      ? variantImageUrl
+      : galleryImages[activeImageIndex] || galleryImages[0] || "";
 
   const relatedPages = useMemo(() => {
     const itemsPerPage = 4;
@@ -270,6 +268,11 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
   };
 
   const handleAddToBag = () => {
+    if (!sizePicked || !selectedSize) {
+      toast.error("Please select a size.");
+      return;
+    }
+
     if (!inStock) {
       toast.error("This variant is out of stock.");
       return;
@@ -319,9 +322,9 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
             </motion.div>
 
             <div className="grid grid-cols-2 gap-4">
-              {(visibleImages.slice(1, 3).length > 0
-                ? visibleImages.slice(1, 3)
-                : [visibleImages[0], visibleImages[0]]
+              {(galleryImages.slice(1, 3).length > 0
+                ? galleryImages.slice(1, 3)
+                : [galleryImages[0], galleryImages[0]]
               ).map((image, index) => (
                 <button
                   key={`${image}-${index}`}
@@ -343,12 +346,12 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
 
             <button
               type="button"
-              onClick={() => setActiveImageIndex(visibleImages.length - 1)}
+              onClick={() => setActiveImageIndex(galleryImages.length - 1)}
               className="aspect-[16/9] bg-gradient-to-br from-zinc-100 via-white to-zinc-100 overflow-hidden flex items-center justify-center p-10 border border-black/10 w-full"
             >
-              {visibleImages[3] ? (
+              {galleryImages[3] ? (
                 <img
-                  src={visibleImages[3]}
+                  src={galleryImages[3]}
                   alt={`${product.name} detail`}
                   className="w-full h-full object-cover rounded-3xl"
                   loading="lazy"
@@ -386,13 +389,13 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
                           ?.filter((variation) => variation.name === color.name && variation.size)
                           .map((variation) => variation.size) ?? [];
 
+                      const nextSize = sizesForColor.includes(selectedSize)
+                        ? selectedSize
+                        : sizesForColor[0] ?? selectedSize;
+
                       setSelectedColor(color.name);
-                      setSelectedSize((currentSize) =>
-                        sizesForColor.includes(currentSize)
-                          ? currentSize
-                          : sizesForColor[0] ?? currentSize
-                      );
-                      setActiveImageIndex(0);
+                      setSelectedSize(nextSize);
+                      setSizePicked(Boolean(nextSize));
                     }}
                     className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       selectedColor === color.name ? "border-black" : "border-black/20"
@@ -409,39 +412,47 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
             </div>
 
             <div className="mb-10 space-y-4">
-              <div className="flex justify-between items-center text-[10px] uppercase tracking-[0.2em] font-medium">
-                <span className="text-black/55">SIZE</span>
-                <button type="button" className="text-black/35 font-medium tracking-widest">
+              <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em]">
+                <span className="font-medium text-black/55">SIZE</span>
+                <button
+                  type="button"
+                  className="font-normal text-black/35 underline decoration-black/25 underline-offset-4 transition-colors hover:text-black/55"
+                >
                   SIZE GUIDE
                 </button>
               </div>
-              <div className="grid grid-cols-4 border border-black/15">
+              <div className="flex gap-2">
                 {sizesForSelectedColor.map((size) => {
                   const sizeInStock = isVariationInStock(product, selectedColor, size);
+                  const isSelected = selectedSize === size;
 
                   return (
-                  <button
-                    key={size}
-                    type="button"
-                    onClick={() => {
-                      setSelectedSize(size);
-                      setActiveImageIndex(0);
-                    }}
-                    disabled={!sizeInStock}
-                    className={`py-5 text-[10px] tracking-widest border-r last:border-r-0 border-black/15 transition-all disabled:cursor-not-allowed disabled:opacity-35 ${
-                      selectedSize === size
-                        ? "bg-black text-white"
-                        : "bg-transparent text-black hover:bg-black/5"
-                    }`}
-                  >
-                    {size}
-                  </button>
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => {
+                        setSelectedSize(size);
+                        setSizePicked(true);
+                      }}
+                      disabled={!sizeInStock}
+                      className={`flex-1 py-5 text-[10px] font-medium uppercase tracking-[0.2em] transition-all disabled:cursor-not-allowed disabled:opacity-35 ${
+                        isSelected
+                          ? "border border-black bg-black text-white"
+                          : "border border-black/15 bg-white text-black hover:bg-black/[0.03]"
+                      }`}
+                    >
+                      {size}
+                    </button>
                   );
                 })}
               </div>
               <p
                 className={`text-[10px] uppercase tracking-[0.2em] ${
-                  inStock ? "text-black/45" : "text-red-600"
+                  !sizePicked
+                    ? "text-black/45"
+                    : inStock
+                      ? "text-black/45"
+                      : "text-red-600"
                 }`}
               >
                 {stockLabel}
@@ -451,10 +462,10 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
             <button
               type="button"
               onClick={handleAddToBag}
-              disabled={!inStock}
+              disabled={!sizePicked || !inStock}
               className="w-full bg-black text-white text-[11px] uppercase tracking-[0.4em] font-medium py-6 mb-16 hover:bg-zinc-900 active:scale-[0.99] transition-all disabled:cursor-not-allowed disabled:bg-black/35"
             >
-              {inStock ? "Add to Bag" : "Out of Stock"}
+              {!sizePicked ? "Select a Size" : inStock ? "Add to Bag" : "Out of Stock"}
             </button>
 
             <div className="space-y-0">

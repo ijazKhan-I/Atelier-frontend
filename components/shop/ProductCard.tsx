@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Product } from "@/type/shopType";
-import { BASIC_URL } from "@/app/api/strapi";
+import { getProductCardImageUrl } from "@/lib/product-display";
 import { isProductInStock } from "@/lib/product-stock";
 
 interface ProductCardProps {
@@ -11,10 +11,8 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-const firstImage = Array.isArray(product.image)? product.image[0]: product.image;
-
-const imageUrl = `${BASIC_URL}${firstImage?.url}`;
-const inStock = isProductInStock(product);
+  const imageUrl = getProductCardImageUrl(product);
+  const inStock = isProductInStock(product);
 
   const card = (
     <motion.div
@@ -29,7 +27,7 @@ const inStock = isProductInStock(product);
             Out of Stock
           </span>
         ) : null}
-        {product.image ? (
+        {imageUrl ? (
           <img
             src={imageUrl}
             alt={product.name}
