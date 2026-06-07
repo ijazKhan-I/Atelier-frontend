@@ -97,7 +97,7 @@ export default function Header() {
   return (
     <header>
       <nav className="fixed top-0 w-full z-50 bg-brand-offwhite/80 backdrop-blur-md border-b border-black/5">
-        <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 h-16 sm:h-20 flex items-center justify-between">
 
           {/* Left Side */}
           <div className="flex items-center space-x-12">
@@ -105,7 +105,7 @@ export default function Header() {
             {/* Logo */}
             <Link
               href="/"
-              className="text-2xl font-serif tracking-tighter uppercase font-bold"
+              className="text-xl sm:text-2xl font-serif tracking-tighter uppercase font-bold"
             >
               Atelier
             </Link>
@@ -147,7 +147,7 @@ export default function Header() {
           </div>
 
           {/* Right Side */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-3 sm:space-x-6">
 
             <button
               type="button"
@@ -187,7 +187,7 @@ export default function Header() {
             <Link href="/cart" className="relative p-2 opacity-70 hover:opacity-100 transition-opacity">
               <ShoppingBag size={18} />
 
-              <span className="absolute top-1 right-1 min-w-3 h-3 px-1 bg-brand-black text-white text-[7px] flex items-center justify-center rounded-full">
+              <span className="absolute top-1 right-1 min-w-4 h-4 px-1 bg-brand-black text-white text-[8px] flex items-center justify-center rounded-full">
                 {cartCount}
               </span>
             </Link>
@@ -205,10 +205,10 @@ export default function Header() {
         </div>
 
         {searchOpen ? (
-          <div className="border-t border-black/5 bg-brand-offwhite/95 backdrop-blur-md px-6 lg:px-12 py-4">
+          <div className="border-t border-black/5 bg-brand-offwhite/95 backdrop-blur-md px-4 sm:px-6 lg:px-12 py-4">
             <form
               onSubmit={handleSearchSubmit}
-              className="max-w-screen-2xl mx-auto flex items-center gap-4"
+              className="max-w-screen-2xl mx-auto flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4"
             >
               <Search size={18} className="shrink-0 opacity-50" />
               <input
@@ -221,7 +221,7 @@ export default function Header() {
               />
               <button
                 type="submit"
-                className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-70 hover:opacity-100 transition-opacity"
+                className="hidden sm:inline text-[10px] font-bold uppercase tracking-[0.2em] opacity-70 hover:opacity-100 transition-opacity"
               >
                 Search
               </button>
@@ -240,7 +240,7 @@ export default function Header() {
         {/* Mobile Menu */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-300 ${mobileMenuOpen
-              ? "max-h-96 border-t border-black/5"
+              ? "max-h-[80vh] overflow-y-auto border-t border-black/5"
               : "max-h-0"
             }`}
         >

@@ -271,14 +271,14 @@ export default function ProductGrid({ products, searchQuery = "" }: Props) {
         onSortChange={setSortBy}
       />
 
-      <section id="products" className="section-container py-12">
+      <section id="products" className="section-container py-8 sm:py-12">
         {searchQuery ? (
           <p className="max-w-7xl mx-auto mb-8 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
             Results for &ldquo;{searchQuery}&rdquo;
           </p>
         ) : null}
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 sm:gap-x-8 sm:gap-y-16">
           {pageProducts.map((product) => {
             return (
               <ProductCard

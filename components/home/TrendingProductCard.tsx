@@ -34,11 +34,11 @@ export default function TrendingProductCard({ product }: Props) {
       </div>
 
       <div className="flex justify-between items-start gap-4">
-        <div>
+        <div className="min-w-0 flex-1">
           <p className="text-[10px] uppercase tracking-widest text-brand-black/40 mb-1">
             {categoryName}
           </p>
-          <h3 className="text-lg font-serif">{product.name}</h3>
+          <h3 className="text-lg font-serif line-clamp-2">{product.name}</h3>
         </div>
         <span className="text-sm font-medium shrink-0">{priceLabel}</span>
       </div>

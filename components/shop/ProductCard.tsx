@@ -43,16 +43,16 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
       </div>
 
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-sm font-bold tracking-[0.1em] uppercase mb-1">
+      <div className="flex justify-between items-start gap-4">
+        <div className="min-w-0 flex-1 pr-2">
+          <h3 className="text-sm font-bold tracking-[0.1em] uppercase mb-1 line-clamp-2">
             {product.name}
           </h3>
-          <p className="text-[10px] font-bold tracking-[0.15em] uppercase text-black/40">
+          <p className="text-[10px] font-bold tracking-[0.15em] uppercase text-black/40 line-clamp-2">
             {product.description}
           </p>
         </div>
-        <span className="text-sm font-medium">{`${product.price} PKR`}</span>
+        <span className="text-sm font-medium shrink-0">{`${product.price} PKR`}</span>
       </div>
     </motion.div>
   );

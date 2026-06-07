@@ -53,16 +53,19 @@ export default function ContactClient({ content }: Props) {
     setMessage("");
   }
 
+  const fieldClass =
+    "w-full border border-black/10 bg-white px-4 py-3.5 text-sm text-brand-black placeholder:text-black/30 transition-colors focus:border-black/35 focus:outline-none";
+
   return (
-    <div className="section-container py-12 lg:py-20">
-      <div className="grid grid-cols-1 items-start gap-24 md:grid-cols-2">
+    <div className="section-container py-10 sm:py-14 lg:py-20">
+      <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-16 lg:gap-24">
         {/* ── Left: intro + form (Strapi: title, description, form) ── */}
         <div className="space-y-12">
           <div className="space-y-6">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="font-serif text-6xl md:text-8xl"
+              className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl"
             >
               {title}
             </motion.h1>
@@ -70,12 +73,12 @@ export default function ContactClient({ content }: Props) {
             <p className="max-w-md leading-relaxed text-gray-500">{description}</p>
           </div>
 
-          <form className="space-y-8" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <label
                   htmlFor="contact-name"
-                  className="text-[10px] font-bold uppercase tracking-widest text-gray-400"
+                  className="text-sm text-black/70"
                 >
                   {form.nameLabel}
                 </label>
@@ -86,14 +89,14 @@ export default function ContactClient({ content }: Props) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={form.namePlaceholder}
-                  className="w-full border-b border-gray-200 bg-transparent py-3 placeholder:text-gray-300 transition-colors focus:border-black focus:outline-none"
+                  className={fieldClass}
                 />
               </div>
 
               <div className="space-y-2">
                 <label
                   htmlFor="contact-email"
-                  className="text-[10px] font-bold uppercase tracking-widest text-gray-400"
+                  className="text-sm text-black/70"
                 >
                   {form.emailLabel}
                 </label>
@@ -104,7 +107,7 @@ export default function ContactClient({ content }: Props) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={form.emailPlaceholder}
-                  className="w-full border-b border-gray-200 bg-transparent py-3 placeholder:text-gray-300 transition-colors focus:border-black focus:outline-none"
+                  className={fieldClass}
                 />
               </div>
             </div>
@@ -112,18 +115,18 @@ export default function ContactClient({ content }: Props) {
             <div className="space-y-2">
               <label
                 htmlFor="contact-message"
-                className="text-[10px] font-bold uppercase tracking-widest text-gray-400"
+                className="text-sm text-black/70"
               >
                 {form.messageLabel}
               </label>
               <textarea
                 id="contact-message"
-                rows={4}
+                rows={6}
                 required
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder={form.messagePlaceholder}
-                className="w-full resize-none border border-gray-200 bg-transparent p-4 placeholder:text-gray-300 transition-colors focus:border-black focus:outline-none"
+                className={`${fieldClass} min-h-[180px] resize-none`}
               />
             </div>
 
@@ -141,7 +144,7 @@ export default function ContactClient({ content }: Props) {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-black px-10 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-2 w-full bg-black px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-black/85 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:px-12"
             >
               {submitting ? "Sending..." : form.submitLabel}
             </button>
@@ -159,7 +162,7 @@ export default function ContactClient({ content }: Props) {
             <img
               src={officeImageUrl}
               alt="Atelier Office"
-              className="h-full w-full object-cover grayscale"
+              className="h-full w-full object-cover"
               referrerPolicy="no-referrer"
             />
           </motion.div>
@@ -211,7 +214,7 @@ export default function ContactClient({ content }: Props) {
       </div>
 
       {/* ── Flagship locations ── */}
-      <div className="mt-48 space-y-16">
+      <div className="mt-16 space-y-12 sm:mt-24 lg:mt-48 lg:space-y-16">
         <h2 className="font-serif text-4xl md:text-5xl">{locationsHeading}</h2>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -222,7 +225,7 @@ export default function ContactClient({ content }: Props) {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="group space-y-6 bg-gray-50 p-10 transition-all duration-500 hover:bg-black hover:text-white"
+              className="group space-y-6 bg-gray-50 p-6 transition-all duration-500 hover:bg-black hover:text-white sm:p-10"
             >
               <h3 className="font-serif text-2xl">{loc.city}</h3>
 

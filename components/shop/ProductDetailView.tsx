@@ -298,9 +298,9 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
   };
 
   return (
-    <div className="bg-white text-black pt-32 pb-24">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-32">
+    <div className="bg-white text-black pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-32 lg:pb-24">
+      <div className="section-container max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16 lg:gap-24 mb-16 sm:mb-24 lg:mb-32">
           <div className="space-y-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -321,7 +321,7 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
               )}
             </motion.div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {(galleryImages.slice(1, 3).length > 0
                 ? galleryImages.slice(1, 3)
                 : [galleryImages[0], galleryImages[0]]
@@ -347,7 +347,7 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
             <button
               type="button"
               onClick={() => setActiveImageIndex(galleryImages.length - 1)}
-              className="aspect-[16/9] bg-gradient-to-br from-zinc-100 via-white to-zinc-100 overflow-hidden flex items-center justify-center p-10 border border-black/10 w-full"
+              className="hidden sm:flex aspect-[16/9] bg-gradient-to-br from-zinc-100 via-white to-zinc-100 overflow-hidden items-center justify-center p-10 border border-black/10 w-full"
             >
               {galleryImages[3] ? (
                 <img
@@ -369,10 +369,10 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
               SHOP / {breadcrumbCategory}
             </nav>
 
-            <h1 className="text-5xl md:text-6xl font-serif mb-6 leading-[1.1]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif mb-4 sm:mb-6 leading-[1.1]">
               {product.name}
             </h1>
-            <p className="text-xl font-light mb-12">${displayPrice.toFixed(2)}</p>
+            <p className="text-lg sm:text-xl font-light mb-8 sm:mb-12">${displayPrice.toFixed(2)}</p>
 
             <div className="mb-10 space-y-4">
               <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-black/55">
@@ -421,7 +421,7 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
                   SIZE GUIDE
                 </button>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {sizesForSelectedColor.map((size) => {
                   const sizeInStock = isVariationInStock(product, selectedColor, size);
                   const isSelected = selectedSize === size;
@@ -435,7 +435,7 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
                         setSizePicked(true);
                       }}
                       disabled={!sizeInStock}
-                      className={`flex-1 py-5 text-[10px] font-medium uppercase tracking-[0.2em] transition-all disabled:cursor-not-allowed disabled:opacity-35 ${
+                      className={`min-w-[3rem] flex-none px-3 py-4 text-[10px] font-medium uppercase tracking-[0.2em] transition-all disabled:cursor-not-allowed disabled:opacity-35 sm:flex-1 sm:py-5 ${
                         isSelected
                           ? "border border-black bg-black text-white"
                           : "border border-black/15 bg-white text-black hover:bg-black/[0.03]"
@@ -483,13 +483,13 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
         </div>
 
         {categoryProducts.length > 0 && (
-          <section id="cross-sell-section" className="border-t border-black/10 pt-24">
-            <div className="flex justify-between items-end mb-16">
+          <section id="cross-sell-section" className="border-t border-black/10 pt-12 sm:pt-16 lg:pt-24">
+            <div className="flex flex-col gap-6 mb-10 sm:mb-16 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <span className="text-[10px] uppercase tracking-[0.5em] text-black/35 font-bold mb-4 block">
+                <span className="text-[10px] uppercase tracking-[0.5em] text-black/35 font-bold mb-3 sm:mb-4 block">
                   {breadcrumbCategory}
                 </span>
-                <h2 className="text-4xl md:text-5xl font-serif">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif">
                   More from {product.category?.name ?? "this category"}
                 </h2>
                 <p className="mt-4 text-sm md:text-base text-black/60">

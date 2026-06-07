@@ -41,10 +41,10 @@ export default function Filters({
   return (
     <div className="px-4 sm:px-6 border-t border-black/5 py-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-wrap items-center justify-between gap-4 py-4">
-          <div className="flex flex-wrap items-center gap-8">
-            {filters.map((filter) => (
-              <div key={filter} className="relative">
+        <div className="flex flex-col gap-4 py-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4 overflow-x-auto hide-scrollbar pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
+            {filters.map((filter, index) => (
+              <div key={filter} className="relative shrink-0">
                 <button
                   type="button"
                   onClick={() =>
@@ -57,7 +57,11 @@ export default function Filters({
                 </button>
 
                 {openFilter === filter && (
-                  <div className="absolute left-0 top-full mt-3 z-20 min-w-48 rounded-2xl border border-black/10 bg-white p-3 shadow-sm">
+                  <div
+                    className={`absolute top-full z-20 mt-3 max-h-60 min-w-48 overflow-y-auto rounded-2xl border border-black/10 bg-white p-3 shadow-sm ${
+                      index >= 2 ? "right-0 sm:left-0 sm:right-auto" : "left-0"
+                    }`}
+                  >
                     <div className="flex flex-col gap-1">
                       {filterOptions[filter].map((option) => {
                         const isActive = selectedFilters[filter].includes(option);
@@ -82,8 +86,8 @@ export default function Filters({
             ))}
           </div>
 
-          <div className="relative">
-            <div className="flex items-center gap-4 text-[10px] font-bold tracking-[0.1em] uppercase">
+          <div className="relative shrink-0">
+            <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold tracking-[0.1em] uppercase sm:gap-4">
               <span className="text-black/40">Sort by:</span>
               <button
                 type="button"

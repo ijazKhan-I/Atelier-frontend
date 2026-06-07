@@ -31,8 +31,8 @@ export default function MyOrdersView() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-brand-offwhite text-brand-black pt-28 pb-20">
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
+    <div className="min-h-screen bg-brand-offwhite text-brand-black pt-24 pb-16 sm:pt-28 sm:pb-20">
+      <div className="section-container">
         <Link
           href="/shop"
           className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.3em] uppercase text-black/40 hover:text-black transition-colors"

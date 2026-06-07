@@ -27,7 +27,7 @@ export default function Pagination({
   const normalizedPages = Array.from(new Set(visiblePages)).sort((a, b) => a - b);
 
   return (
-    <div className="py-20 flex items-center justify-center gap-10">
+    <div className="py-12 sm:py-16 lg:py-20 flex items-center justify-center gap-4 sm:gap-10">
       <button
         type="button"
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
@@ -37,7 +37,7 @@ export default function Pagination({
         <ChevronLeft className="w-5 h-5 text-black/40" />
       </button>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-3 sm:gap-6">
         {normalizedPages.map((page, idx) => {
           const prev = normalizedPages[idx - 1];
           const showDots = idx > 0 && prev !== page - 1;

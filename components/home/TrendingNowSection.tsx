@@ -44,18 +44,18 @@ export default function TrendingNowSection({ section }: Props) {
   };
 
   return (
-    <section className="bg-[#f0efea] py-24 lg:py-32 overflow-hidden">
+    <section className="bg-[#f0efea] py-16 sm:py-24 lg:py-32 overflow-hidden">
       <div className="section-container">
-        <div className="flex items-end justify-between mb-16">
+        <div className="mb-10 flex flex-col gap-6 sm:mb-16 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-4">
-            <h2 className="text-4xl lg:text-6xl">{heading}</h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-6xl">{heading}</h2>
             <p className="text-sm lg:text-base text-brand-black/60">
               {description}
             </p>
           </div>
 
           {hasProducts && pages.length > 1 && (
-            <div className="flex gap-4">
+            <div className="flex gap-4 self-end sm:self-auto">
               <button
                 type="button"
                 onClick={prevSlide}

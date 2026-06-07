@@ -14,7 +14,7 @@ export default function OrderSummary({
   shippingLabel = "Calculated at next step",
 }: Props) {
   return (
-    <aside className="rounded-sm border border-black/10 bg-[#fafafa] p-8 md:p-10">
+    <aside className="rounded-sm border border-black/10 bg-[#fafafa] p-6 sm:p-8 md:p-10 lg:sticky lg:top-24">
       <h2 className="font-serif text-3xl mb-8">Order Summary</h2>
 
       <div className="space-y-6">
@@ -34,9 +34,9 @@ export default function OrderSummary({
               ) : null}
             </div>
 
-            <div className="flex flex-1 items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-medium">{item.name}</p>
+            <div className="flex flex-1 items-start justify-between gap-4 min-w-0">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium line-clamp-2">{item.name}</p>
                 <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-black/45">
                   {item.size} | {item.color}
                 </p>

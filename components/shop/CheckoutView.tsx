@@ -121,8 +121,8 @@ export default function CheckoutView() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-brand-black pt-28 pb-20">
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
+    <div className="min-h-screen bg-white text-brand-black pt-24 pb-16 sm:pt-28 sm:pb-20">
+      <div className="section-container">
         <Link
           href="/cart"
           className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.3em] uppercase text-black/40 hover:text-black transition-colors"
@@ -131,7 +131,7 @@ export default function CheckoutView() {
           Back to cart
         </Link>
 
-        <div className="mt-10 mb-14 flex flex-wrap items-center gap-6 text-[10px] uppercase tracking-[0.35em]">
+        <div className="mt-8 mb-10 flex flex-col gap-3 text-[9px] uppercase tracking-[0.2em] sm:mt-10 sm:mb-14 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6 sm:text-[10px] sm:tracking-[0.35em]">
           {STEPS.map((step, index) => {
             const isActive = index === activeStep;
             const isDone = index < activeStep;
@@ -156,7 +156,7 @@ export default function CheckoutView() {
           })}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] gap-8 sm:gap-12 items-start">
           <section>
             {activeStep === 0 ? (
               <>

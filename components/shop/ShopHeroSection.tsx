@@ -16,7 +16,7 @@ export default function ShopHeroSection({ hero }: Props) {
   const isInternalLink = href.startsWith("/");
 
   return (
-    <section className="section-container pt-32 pb-16">
+    <section className="section-container pt-24 pb-10 sm:pt-28 sm:pb-14 lg:pt-32 lg:pb-16">
       <div className="max-w-7xl mx-auto">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
@@ -33,7 +33,7 @@ export default function ShopHeroSection({ hero }: Props) {
             transition={{ delay: 0.1 }}
             className="max-w-2xl"
           >
-            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-serif font-bold leading-[1.1] mb-6">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-bold leading-[1.1] mb-6">
               {headingLines.map((line, index) => (
                 <span key={`${line}-${index}`}>
                   {line}
@@ -41,7 +41,7 @@ export default function ShopHeroSection({ hero }: Props) {
                 </span>
               ))}
             </h1>
-            <p className="text-black/60 text-base sm:text-lg max-w-sm leading-relaxed">
+            <p className="text-black/60 text-base sm:text-lg max-w-full sm:max-w-md leading-relaxed">
               {description}
             </p>
           </motion.div>

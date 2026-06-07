@@ -59,8 +59,8 @@ export default function CartView() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-offwhite text-brand-black pt-28 pb-20">
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
+    <div className="min-h-screen bg-brand-offwhite text-brand-black pt-24 pb-16 sm:pt-28 sm:pb-20">
+      <div className="section-container">
         <Link
           href="/shop"
           className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.3em] uppercase text-black/40 hover:text-black transition-colors"
@@ -70,7 +70,7 @@ export default function CartView() {
         </Link>
 
         <div className="mt-8 mb-12">
-          <h1 className="font-serif text-5xl md:text-7xl leading-none">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-6xl lg:text-7xl leading-none">
             Your Selection
           </h1>
           <p className="mt-4 text-black/50 text-sm md:text-base">
@@ -89,12 +89,12 @@ export default function CartView() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-10 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-8 sm:gap-10 items-start">
             <div className="space-y-8">
               {cart.map((item) => (
                 <div
                   key={`${item.documentId}-${item.color}-${item.size}`}
-                  className="grid grid-cols-1 md:grid-cols-[240px_minmax(0,1fr)] gap-6 pb-8 border-b border-black/10"
+                  className="grid grid-cols-1 sm:grid-cols-[160px_minmax(0,1fr)] md:grid-cols-[200px_minmax(0,1fr)] lg:grid-cols-[240px_minmax(0,1fr)] gap-6 pb-8 border-b border-black/10"
                 >
                   <div className="aspect-[3/4] overflow-hidden bg-white border border-black/10">
                     {item.image ? (
@@ -108,9 +108,9 @@ export default function CartView() {
                   </div>
 
                   <div className="flex flex-col justify-between gap-6">
-                    <div className="flex items-start justify-between gap-6">
-                      <div>
-                        <h2 className="font-serif text-3xl leading-tight">{item.name}</h2>
+                    <div className="flex items-start justify-between gap-4 sm:gap-6">
+                      <div className="min-w-0">
+                        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl leading-tight">{item.name}</h2>
                         <p className="mt-2 text-xs uppercase tracking-[0.25em] text-black/45">
                           {item.color} / {item.size}
                         </p>
@@ -122,7 +122,7 @@ export default function CartView() {
                               : `${item.maxStock - item.quantity} more available`}
                         </p>
                       </div>
-                      <p className="text-sm text-black/60">
+                      <p className="text-sm text-black/60 shrink-0">
                         {formatPrice(item.price)}
                       </p>
                     </div>
@@ -188,7 +188,7 @@ export default function CartView() {
               </button>
             </div>
 
-            <aside className="rounded-[28px] bg-white text-black p-8 md:p-10 border border-black/10 shadow-sm">
+            <aside className="rounded-[28px] bg-white text-black p-6 sm:p-8 md:p-10 border border-black/10 shadow-sm lg:sticky lg:top-24">
               <h2 className="font-serif text-3xl">Order Summary</h2>
 
               <div className="mt-8 space-y-5 text-sm">

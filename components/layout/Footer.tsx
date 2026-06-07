@@ -22,10 +22,10 @@ const connectLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-black text-white pt-24 pb-12 border-t border-white/5">
+    <footer className="bg-brand-black text-white pt-16 pb-10 sm:pt-20 lg:pt-24 border-t border-white/5">
       
       {/* Top Footer */}
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-24">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 mb-12 sm:mb-16 lg:mb-24">
         
         {/* Brand */}
         <div className="space-y-8">
@@ -104,11 +104,11 @@ export default function Footer() {
       </div>
 
       {/* Bottom Footer */}
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between pt-12 border-t border-white/5 text-[10px] uppercase tracking-widest opacity-40 gap-4">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between pt-8 sm:pt-12 border-t border-white/5 text-[10px] uppercase tracking-widest opacity-40 gap-4">
         
         <p>© 2026 Atelier. All rights reserved.</p>
 
-        <div className="flex space-x-12">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-8">
           <span>United States / EN</span>
 
           <button className="hover:opacity-100 transition-opacity">

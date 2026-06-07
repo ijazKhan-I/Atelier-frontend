@@ -51,7 +51,7 @@ function CurationCard({
   motionX: number;
 }) {
   const imageWrapClass = card.squareImage
-    ? "aspect-square overflow-hidden bg-[#151619] flex items-center justify-center p-12"
+    ? "aspect-square overflow-hidden bg-[#151619] flex items-center justify-center p-6 sm:p-8 lg:p-12"
     : "aspect-[3/4] overflow-hidden grayscale hover:grayscale-0 transition-all duration-700";
 
   const imageClass = card.squareImage
@@ -125,7 +125,7 @@ export default function HomeHeroSection({ content }: Props) {
   return (
     <div className="min-h-screen">
       {/* ── Hero (Strapi: hero component) ── */}
-      <section className="relative h-[90vh] overflow-hidden">
+      <section className="relative min-h-[70vh] sm:h-[80vh] lg:h-[90vh] overflow-hidden">
         <img
           src={hero.backgroundImageUrl}
           alt={hero.heading}
@@ -148,7 +148,7 @@ export default function HomeHeroSection({ content }: Props) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="mb-12 max-w-4xl text-5xl leading-[1.1] lg:text-8xl"
+            className="mb-8 sm:mb-12 max-w-4xl text-4xl leading-[1.1] sm:text-5xl md:text-6xl lg:text-8xl"
           >
             {hero.heading}
           </motion.h1>
@@ -166,7 +166,7 @@ export default function HomeHeroSection({ content }: Props) {
       </section>
 
       {/* ── Curation grid (Strapi: curationPrimary + curationSecondary) ── */}
-      <section className="section-container py-24 lg:py-32">
+      <section className="section-container py-16 sm:py-24 lg:py-32">
         <div className="grid grid-cols-1 items-end gap-12 lg:grid-cols-12 lg:gap-24">
           <div className="flex items-end lg:col-span-7">
             <CurationCard card={curationPrimary} motionX={-50} />
@@ -181,13 +181,13 @@ export default function HomeHeroSection({ content }: Props) {
       <TrendingNowSection section={trending} />
 
       {/* ── Philosophy (Strapi: philosophy component) ── */}
-      <section className="bg-brand-black py-32 text-white lg:py-0">
+      <section className="bg-brand-black py-16 text-white sm:py-24 lg:py-0">
         <div className="section-container grid grid-cols-1 lg:grid-cols-2 lg:items-center">
-          <div className="space-y-12 py-24 pr-12 lg:py-32 lg:pr-24">
+          <div className="space-y-8 py-12 pr-0 sm:space-y-12 sm:py-16 lg:py-32 lg:pr-24">
             <span className="text-[10px] font-medium uppercase tracking-[0.4em] opacity-60">
               {philosophy.label}
             </span>
-            <h2 className="text-4xl italic leading-tight lg:text-6xl">{philosophy.quote}</h2>
+            <h2 className="text-3xl italic leading-tight sm:text-4xl lg:text-6xl">{philosophy.quote}</h2>
             <p className="max-w-md text-lg leading-relaxed text-white/60">
               {philosophy.description}
             </p>
@@ -216,11 +216,11 @@ export default function HomeHeroSection({ content }: Props) {
       </section>
 
       {/* ── Newsletter (Strapi: newsletter component) ── */}
-      <section className="section-container py-32 text-center">
-        <h2 className="mb-6 text-4xl lg:text-5xl">{newsletter.heading}</h2>
-        <p className="mb-12 text-brand-black/60">{newsletter.description}</p>
+      <section className="section-container py-16 text-center sm:py-24 lg:py-32">
+        <h2 className="mb-6 text-3xl sm:text-4xl lg:text-5xl">{newsletter.heading}</h2>
+        <p className="mb-8 sm:mb-12 text-brand-black/60">{newsletter.description}</p>
         <form
-          className="mx-auto flex max-w-xl flex-col gap-4 border-b border-black pb-2 sm:flex-row"
+          className="mx-auto flex max-w-xl flex-col gap-4 border-b border-black pb-2 sm:flex-row sm:items-end"
           onSubmit={handleNewsletterSubmit}
         >
           <input
