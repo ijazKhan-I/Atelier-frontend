@@ -28,10 +28,11 @@ type AccordionProps = {
 };
 
 function resolveMediaUrl(url?: string | null) {
-  const base = (process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337").replace(
-    /\/$/,
-    ""
-  );
+  const base = (
+    process.env.NEXT_PUBLIC_API_URL ??
+    process.env.NEXT_PUBLIC_STRAPI_URL ??
+    "http://localhost:8000"
+  ).replace(/\/$/, "");
 
   if (!url) return "";
   if (url.startsWith("http://") || url.startsWith("https://")) return url;

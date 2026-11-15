@@ -1,18 +1,25 @@
+/** Backend base URL (Django REST). Legacy Strapi env names still work. */
+export const BASIC_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.NEXT_PUBLIC_STRAPI_URL ||
+  process.env.STRAPI_URL ||
+  process.env.API_URL;
 
-export const BASIC_URL = process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL;
+const missingUrlMessage =
+  "Missing API URL. Set NEXT_PUBLIC_API_URL (or NEXT_PUBLIC_STRAPI_URL).";
 
-// Fetch data from Strapi and surface the real error when it fails.
+/** GET from the Atelier API. */
 export async function fetchStrapi<T>(endpoint: string): Promise<T | null> {
   return fetchStrapiWithAuth<T>(endpoint);
 }
 
-/** GET request with optional JWT for protected Strapi routes. */
+/** GET with optional JWT for protected routes. */
 export async function fetchStrapiWithAuth<T>(
   endpoint: string,
   token?: string | null
 ): Promise<T | null> {
   if (!BASIC_URL) {
-    throw new Error("Missing Strapi URL. Set NEXT_PUBLIC_STRAPI_URL or STRAPI_URL.");
+    throw new Error(missingUrlMessage);
   }
 
   try {
@@ -39,16 +46,14 @@ export async function fetchStrapiWithAuth<T>(
   }
 }
 
-
-
-// Post data to Strapi. Pass token for authenticated requests (e.g. placing orders).
+/** POST JSON. Pass token for authenticated requests (e.g. placing orders). */
 export async function postData<T>(
   endpoint: string,
   bodyData: unknown,
   options?: { token?: string | null }
 ): Promise<T | null> {
   if (!BASIC_URL) {
-    throw new Error("Missing Strapi URL. Set NEXT_PUBLIC_STRAPI_URL or STRAPI_URL.");
+    throw new Error(missingUrlMessage);
   }
 
   try {
