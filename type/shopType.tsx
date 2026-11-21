@@ -78,9 +78,9 @@ export type Product = {
   publishedAt: string;
   name: string;
   price: number;
-  shipping_info?: RichTextBlock[] | null;
-  return_policy?: RichTextBlock[] | null;
-  artisan_notes?: RichTextBlock[] | null;
+  shipping_info?: RichTextBlock[] | { label?: string; detail?: string } | string | null;
+  return_policy?: RichTextBlock[] | { label?: string; detail?: string } | string | null;
+  artisan_notes?: RichTextBlock[] | { label?: string; detail?: string } | string | null;
   productVariation?: ProductVariation[];
   image?: StrapiImage[] | StrapiImage | null;
   category?: Category | null;

@@ -64,9 +64,30 @@ function getGalleryImages(product: StrapiProduct) {
   return fallbackUrl ? [fallbackUrl] : [];
 }
 
-function flattenBlocks(blocks?: RichTextBlock[] | null) {
-  return (blocks ?? [])
-    .flatMap((block) => block.children.map((child) => child.text))
+/** Normalize Strapi rich-text arrays OR Django `{ label, detail }` JSON into display lines. */
+function flattenBlocks(
+  blocks?: RichTextBlock[] | { label?: string; detail?: string } | string | null
+) {
+  if (!blocks) return [];
+
+  if (typeof blocks === "string") {
+    return blocks
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+  }
+
+  // Django JSONField shape from seed / admin
+  if (!Array.isArray(blocks) && typeof blocks === "object") {
+    const label = typeof blocks.label === "string" ? blocks.label.trim() : "";
+    const detail = typeof blocks.detail === "string" ? blocks.detail.trim() : "";
+    return [label, detail].filter(Boolean);
+  }
+
+  if (!Array.isArray(blocks)) return [];
+
+  return blocks
+    .flatMap((block) => (block?.children ?? []).map((child) => child?.text ?? ""))
     .flatMap((text) => text.split("\n"))
     .map((line) => line.trim())
     .filter(Boolean);
@@ -236,7 +257,7 @@ export default function ProductDetailView({ product, categoryProducts }: Props) 
   const variantImageUrl = getImageUrl(selectedVariation?.image);
   const breadcrumbCategory = product.category?.name?.toUpperCase() ?? "PRODUCT";
 
-  const descriptionLines = product.description
+  const descriptionLines = (product.description ?? "")
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
